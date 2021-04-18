@@ -1,24 +1,30 @@
-name: Build and deploy Node.js app to Azure Web App — mathan-ka
+name: deploy Node.js app to Azure Web App
 on:
-push:
-branches:
-- master
+  push:
+    branches:
+      - main
+env:
+  AZURE_WEBAPP_NAME: tp-wood-images-node
+  AZURE_WEBAPP_PACKAGE_PATH: './dist/tp-wood-qr-frontend'
+  NODE_VERSION: '12.x'
+
 jobs:
-build-and-deploy:
-runs-on: ubuntu-latest
-steps:
-- uses: actions/checkout@master
-- name: Set up Node.js version
-uses: actions/setup-node@v1
-with:
-node-version: '12.x'
-- name: npm install
-run: |
-npm install
-- name: 'Deploy to Azure Web App'
-uses: azure/webapps-deploy@v1
-with:
-app-name: 'tp-wood-images-node'
-slot-name: 'production'
-publish-profile: ${{ secrets.AZURE_KEY_SECRET }}
-package: .
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Use Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+    - name: Install dependencies
+      run: npm install
+    - name: Build
+      run: npm start
+    - name: 'Deploy to Azure WebApp'
+      uses: azure/webapps-deploy@v1
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_KEY_SECRET }}
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
