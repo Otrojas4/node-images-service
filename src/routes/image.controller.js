@@ -12,6 +12,8 @@ router.post('/api-images/create', async (req, res, next) => {
         const imageBody = req.body;//{ imageBase, codProduct, idProduct}
         const imageToCreate = await new Image(imageBody).save();
 
+        console.log('Aqui estoy');
+
         await createQR(imageBody.idProduct);
 
         return res.status(200).send(imageToCreate);
@@ -34,8 +36,11 @@ router.get('/api-images/:idProduct/:codProduct', async (req, res, next) => {
 });
 
 const createQR = async (id) => {
+
     const b64string = await qrcode.toDataURL(`https://goodwood-qr.azurewebsites.net/product/view/${id}`);
-    const base64Alone = b64string.split('dataimage/pngbase64')
+
+    const base64Alone = b64string.split('data:image/png;base64,')
+
     const buf = Buffer.from(base64Alone[1], 'base64');
 
     const qrToCreate = {
@@ -52,8 +57,6 @@ router.get('/api-images-qr/:id', async (req, res) => {
         const id = req.params.id;
 
         const qrInBd = await Qr.findOne({ idProduct: id });
-
-        console.log(qrInBd);
 
         if (qrInBd == null) {
             throw new Error();
