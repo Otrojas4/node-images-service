@@ -13,4 +13,17 @@ router.post('/api-images/create', async (req, res, next) => {
     }
 });
 
+router.get('/api-images/:idProduct/:codProduct', async (req, res, next) => {
+    try {
+        const idProduct = req.params.idProduct;
+        const codProduct = req.params.codProduct;
+
+        const imageFinded = await Image.findOne({idProduct: idProduct, codProduct: codProduct});
+
+        return res.status(201).send(imageFinded);
+    } catch(error) {
+        return res.status(500).send(error);
+    }
+});
+
 module.exports = router;
