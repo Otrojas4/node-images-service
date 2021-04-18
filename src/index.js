@@ -1,7 +1,7 @@
 const http = require('http');
 const app = require('./app');
 
-const port = '5544';
+const port = '8080';
 
 /*Si bien más abajo podriamos hacer app.listen usando un servidor express, lo haremos de este modo
 para una futura integracion con socket.io, ya que este ultimo estara esperando un servidor creado
