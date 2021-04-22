@@ -22,6 +22,22 @@ router.post('/api-images/create', async (req, res, next) => {
     }
 });
 
+router.patch('/api-images/edit', async (req, res, next) => {
+    try {
+        const imageBody = req.body;//{ imageBase, codProduct, idProduct}
+
+        const imageToUpdate = await Image.findOne({ codProduct: imageBody.codProduct, idProduct: imageBody.idProduct });
+
+        imageToUpdate.imageBase = imageBody.imageBase;
+
+        const imageUpdated = await imageToUpdate.save();
+
+        return res.status(200).send(imageUpdated);
+    } catch(error) {
+        return res.status(500).send(error);
+    }
+});
+
 router.get('/api-images/:idProduct/:codProduct', async (req, res, next) => {
     try {
         const idProduct = req.params.idProduct;
@@ -62,7 +78,7 @@ router.get('/api-images-qr/:id', async (req, res) => {
             throw new Error();
         }
 
-        res.set('Content-Type', 'image/jpg');
+        res.set('Content-Type', 'image/png');
         return res.send(qrInBd.qr);
 
     } catch(e) {
