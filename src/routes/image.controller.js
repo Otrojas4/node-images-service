@@ -22,7 +22,7 @@ router.post('/api-images/create', async (req, res, next) => {
     }
 });
 
-router.patch('/api-images/edit', async (req, res, next) => {
+router.put('/api-images/edit', async (req, res, next) => {
     try {
         const imageBody = req.body;//{ imageBase, codProduct, idProduct}
 
