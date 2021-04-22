@@ -37,7 +37,7 @@ router.get('/api-images/:idProduct/:codProduct', async (req, res, next) => {
 
 const createQR = async (id) => {
 
-    const b64string = await qrcode.toDataURL(`https://goodwood-qr.azurewebsites.net/product/view/${id}`);
+    const b64string = await qrcode.toDataURL(`https://goodwood-qr.azurewebsites.net/#/product/view/${id}`);
 
     const base64Alone = b64string.split('data:image/png;base64,')
 
